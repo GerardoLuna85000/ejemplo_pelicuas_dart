@@ -4,7 +4,16 @@ import 'package:flutter/material.dart';
 class MoviHorizontal extends StatelessWidget {
   //const MoviHorizontal({ Key? key }) : super(key: key);
 final List<Pelicula> peliculas;
-const MoviHorizontal({Key? key, required this.peliculas}) : super(key: key);
+
+final Function siguientePagina;
+
+ MoviHorizontal({Key? key, required this.peliculas,
+ required this.siguientePagina
+ }) : super(key: key);
+
+final _pageConreoller = new PageController(
+  initialPage: 1, viewportFraction: 022
+);
 
 
   @override
@@ -12,10 +21,17 @@ const MoviHorizontal({Key? key, required this.peliculas}) : super(key: key);
 
     final _screenSize = MediaQuery.of(context).size;
 
+    _pageConreoller.addListener((){
+      if(_pageConreoller.position.pixels >= 
+      _pageConreoller.position.maxScrollExtent - 200){
+        siguientePagina();
+      }
+    });
+
     return Container(
       height: _screenSize.height * 0.2,
       child: PageView(
-        controller: PageController(initialPage: 1, viewportFraction: 0.3),
+        controller: _pageConreoller,
         pageSnapping: false,
         children: _crearTarjetas(),
       ),
